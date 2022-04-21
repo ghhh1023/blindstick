@@ -39,11 +39,6 @@
 <!--            <version>4.1.36.Final</version>-->
 <!--        </dependency>-->
         <!--fastjson-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.45</version>
-        </dependency>
 
         <!--shiro-->
         <dependency>
@@ -125,6 +120,20 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.7</version>
         </dependency>
+        <!--图像识别SDK -->
+        <dependency>
+            <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-image</artifactId>
+            <version>3.0.55</version>
+        </dependency>
+
+        <!--fastjson-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.70</version>
+        </dependency>
+
 
 
     </dependencies>
