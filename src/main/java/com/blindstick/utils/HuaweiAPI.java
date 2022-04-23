@@ -10,12 +10,23 @@ import com.huaweicloud.sdk.image.v2.model.ImageTaggingReq;
 import com.huaweicloud.sdk.image.v2.model.RunImageTaggingRequest;
 import com.huaweicloud.sdk.image.v2.model.RunImageTaggingResponse;
 import com.huaweicloud.sdk.image.v2.region.ImageRegion;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-public class ImageRecognition {
+/**
+ * @author 许金涛
+ * 与华为云验证相关的东西,得到华为API图像识别的相关类
+ */
+@Component
+public class HuaweiAPI {
+    @Value("${Huawei.ImageApi.ak}")
+    private String ak;
+    @Value("${Huawei.ImageApi.sk}")
+    private String sk;
+    @Value("${Huawei.Obs}")
+    private String obs;
 
-    public static void main(String[] args) {
-        String ak = "PMAKSMTFCD4RJBO4474K";
-        String sk = "kRxQ1O4d3DUceayxG8CzRkzKs12r2YbD6En0rv2O";
+    public String getImageTag(String path){
         ICredential auth = new BasicCredentials()
                 .withAk(ak)
                 .withSk(sk);
@@ -23,16 +34,18 @@ public class ImageRecognition {
                 .withCredential(auth)
                 .withRegion(ImageRegion.valueOf("cn-north-4"))
                 .build();
+        String NewPath=obs+path;
         RunImageTaggingRequest request = new RunImageTaggingRequest();
         ImageTaggingReq body = new ImageTaggingReq();
         body.withLimit(50);
         body.withThreshold(95f);
         body.withLanguage("zh");
-        body.withUrl("https://ai-traffic-demo.obs.cn-south-1.myhuaweicloud.com/bind/1a5ce2300dbd9c48b1bac6c9dca199a46a182525.jpg");
+        body.withUrl(NewPath);
         request.withBody(body);
         try {
             RunImageTaggingResponse response = client.runImageTagging(request);
             System.out.println(response.toString());
+            return response.toString();
         } catch (ConnectionException e) {
             e.printStackTrace();
         } catch (RequestTimeoutException e) {
@@ -43,5 +56,7 @@ public class ImageRecognition {
             System.out.println(e.getErrorCode());
             System.out.println(e.getErrorMsg());
         }
+        return "API-Error";
     }
+
 }

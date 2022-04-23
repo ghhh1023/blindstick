@@ -134,6 +134,12 @@
             <version>1.2.70</version>
         </dependency>
 
+        <!--  OBS      -->
+        <dependency>
+            <groupId>com.huaweicloud</groupId>
+            <artifactId>esdk-obs-java-bundle</artifactId>
+            <version>[3.21.8,)</version>
+        </dependency>
 
 
     </dependencies>

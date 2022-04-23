@@ -44,3 +44,8 @@ my:
       - /blindstick/getCode
       - /blindstick/register
       - /blindstick/test
+Huawei:
+  ImageApi:
+    ak: PMAKSMTFCD4RJBO4474K
+    sk: kRxQ1O4d3DUceayxG8CzRkzKs12r2YbD6En0rv2O
+  Obs: https://ai-traffic-demo.obs.cn-south-1.myhuaweicloud.com/bind/
