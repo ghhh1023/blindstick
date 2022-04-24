@@ -12,7 +12,7 @@ public class HexUtil {
      * ascii转16进制
      *
      * @param str 待转字符串
-     * @return
+     * @return 十六进制字符串
      */
     public static String convertStringToHex(String str) {
         char[] chars = str.toCharArray();
