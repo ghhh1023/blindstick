@@ -11,7 +11,7 @@ public class HexUtil {
     /**
      * ascii转16进制
      *
-     * @param str
+     * @param str 待转字符串
      * @return
      */
     public static String convertStringToHex(String str) {
