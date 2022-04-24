@@ -2,7 +2,6 @@ package com.blindstick.controller;
 
 import com.blindstick.netty.handler.channel.ConnectManager;
 import com.blindstick.utils.HexUtil;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,9 +14,13 @@ public class TestController {
         List<String> addrs = ConnectManager.getDeviceAll();
 
         for (String addr : addrs) {
-            String message=HexUtil.convertStringToHex("hello");
+            String message=HexUtil.convertStringToUTF8("{"+"\"msg\""+":"+"\"你好！\""+"}");
+            String msg=HexUtil.convertStringToHex("{"+"\"msg\""+":"+"}");
+            System.out.println(message);
+            System.out.println(msg);
             //下发指令
-            ConnectManager.sendMessage(addr, message);
+            ConnectManager.sendMessage(addr,message);
+            ConnectManager.sendMessage(addr,msg);
         }
         return "111";
     }

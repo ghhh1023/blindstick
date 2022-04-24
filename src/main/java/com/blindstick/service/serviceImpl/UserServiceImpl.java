@@ -120,8 +120,6 @@ public class UserServiceImpl implements UserService {
 
 
 
-
-
     public String produceSalt()
     {
         StringBuilder randomString= new StringBuilder();
