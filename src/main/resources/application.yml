@@ -49,3 +49,6 @@ Huawei:
     ak: PMAKSMTFCD4RJBO4474K
     sk: kRxQ1O4d3DUceayxG8CzRkzKs12r2YbD6En0rv2O
   Obs: https://ai-traffic-demo.obs.cn-south-1.myhuaweicloud.com/bind/
+  EndPoint: obs.cn-south-1.myhuaweicloud.com
+  BucketName: ai-traffic-demo
+  PrePath: bind
