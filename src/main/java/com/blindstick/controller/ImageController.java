@@ -17,6 +17,5 @@ public class ImageController {
     public String getImageTag(@RequestParam(value="path",defaultValue="1a5ce2300dbd9c48b1bac6c9dca199a46a182525.jpg",required = false)
                                           String path){
         return imageService.getImageTag(path);
-
     }
 }

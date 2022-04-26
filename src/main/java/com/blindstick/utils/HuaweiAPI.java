@@ -10,8 +10,14 @@ import com.huaweicloud.sdk.image.v2.model.ImageTaggingReq;
 import com.huaweicloud.sdk.image.v2.model.RunImageTaggingRequest;
 import com.huaweicloud.sdk.image.v2.model.RunImageTaggingResponse;
 import com.huaweicloud.sdk.image.v2.region.ImageRegion;
+import com.obs.services.ObsClient;
+import com.obs.services.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author 许金涛
@@ -25,6 +31,12 @@ public class HuaweiAPI {
     private String sk;
     @Value("${Huawei.Obs}")
     private String obs;
+    @Value("${Huawei.EndPoint}")
+    private String endPoint;
+    @Value("${Huawei.BucketName}")
+    private String BucketName;
+    @Value("${Huawei.PrePath}")
+    private String prePath;
 
     public String getImageTag(String path){
         ICredential auth = new BasicCredentials()
@@ -58,5 +70,23 @@ public class HuaweiAPI {
         }
         return "API-Error";
     }
+
+
+    public Boolean uploadImage(String localPath, String obsPath)  {
+        // 创建ObsClient实例
+        ObsClient obsClient = new ObsClient(ak, sk, endPoint);
+
+        try {
+            // 使用访问OBS上传文件, localPath为待上传的本地文件路径，需要指定到具体的文件名
+            obsClient.putObject(BucketName, obsPath, new File(localPath));
+            // 关闭obsClient
+            obsClient.close();
+        }catch(IOException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 
 }

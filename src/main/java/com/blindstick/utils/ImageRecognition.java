@@ -28,7 +28,8 @@ public class ImageRecognition {
         body.withLimit(50);
         body.withThreshold(95f);
         body.withLanguage("zh");
-        body.withUrl("https://ai-traffic-demo.obs.cn-south-1.myhuaweicloud.com/bind/1a5ce2300dbd9c48b1bac6c9dca199a46a182525.jpg");
+        String path="https://ai-traffic-demo.obs.cn-south-1.myhuaweicloud.com/bind/test.jpg";
+        body.withUrl(path);
         request.withBody(body);
         try {
             RunImageTaggingResponse response = client.runImageTagging(request);
