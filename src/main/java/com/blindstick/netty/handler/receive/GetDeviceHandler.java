@@ -3,6 +3,7 @@ package com.blindstick.netty.handler.receive;
 
 
 import com.blindstick.netty.handler.channel.ConnectManager;
+import com.blindstick.utils.FileUtil;
 import com.blindstick.utils.HexUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,12 +16,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class GetDeviceHandler {
     private static Logger logger = LoggerFactory.getLogger(GetDeviceHandler.class);
 
     public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public  static boolean imgStart=false;
+    private static final String startRegex="ffd8";
+    private static final String endRegex="ffd9";
 
     /**
      * 数据接收处理器
@@ -60,7 +66,28 @@ public class GetDeviceHandler {
         String time3 = df7.format(new Date());
 
         logger.info(time3 + "上传原始数据:" + receiveHex);
-
+        if(!imgStart){
+            Matcher matcher= Pattern.compile(startRegex).matcher(receiveHex);
+            if(matcher.find()){
+                Integer start = matcher.start();
+                String tempStr=receiveHex.substring(start,receiveHex.length());
+                imgStart=true;
+                FileUtil.saveAsFileWriter("C:/Users/guhao/Desktop/1.txt",tempStr,false);
+            }
+        }
+        else{
+            Matcher matcher= Pattern.compile(endRegex).matcher(receiveHex);
+            if(matcher.find()){
+                Integer start = matcher.start();
+                String tempStr=receiveHex.substring(0,start+4);
+                imgStart=false;
+                FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,true);
+                FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"),"/tmp/images/image.jpeg");
+            }
+            else {
+                FileUtil.saveAsFileWriter("/tmp/images/image.txt",receiveHex,true);
+            }
+        }
         String strReceiveASCII = HexUtil.convertHexToString(receiveHex);
         System.out.println(strReceiveASCII);
         //注册
@@ -82,7 +109,6 @@ public class GetDeviceHandler {
         if(receiveHex.contains("fefefe")){
             logger.info(time3 + "数据包:" + receiveHex);
         }
-
     }
 
 
