@@ -1,16 +1,19 @@
 package com.blindstick.netty.handler.receive;
 
 
-
 import com.blindstick.netty.handler.channel.ConnectManager;
 import com.blindstick.utils.FileUtil;
 import com.blindstick.utils.HexUtil;
+import com.blindstick.utils.HuaweiAPI;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,7 +22,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@Component
 public class GetDeviceHandler {
     private static Logger logger = LoggerFactory.getLogger(GetDeviceHandler.class);
 
@@ -27,6 +30,22 @@ public class GetDeviceHandler {
     public  static boolean imgStart=false;
     private static final String startRegex="ffd8";
     private static final String endRegex="ffd9";
+
+    // 静态变量
+    private static HuaweiAPI huaweiAPI;
+//
+//    // 构造方法注入静态变量
+//    @Autowired
+//    public void setHuaweiAPI(HuaweiAPI huaweiAPI){
+//        GetDeviceHandler.huaweiAPI = huaweiAPI;
+//    }
+    @Autowired
+    private HuaweiAPI huaweiAPI2;
+    @PostConstruct
+    public void init() {
+        GetDeviceHandler.huaweiAPI = this.huaweiAPI2;
+    }
+
 
     /**
      * 数据接收处理器
@@ -72,7 +91,7 @@ public class GetDeviceHandler {
                 Integer start = matcher.start();
                 String tempStr=receiveHex.substring(start,receiveHex.length());
                 imgStart=true;
-                FileUtil.saveAsFileWriter("C:/Users/guhao/Desktop/1.txt",tempStr,false);
+                FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,false);
             }
         }
         else{
@@ -83,6 +102,9 @@ public class GetDeviceHandler {
                 imgStart=false;
                 FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,true);
                 FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"),"/tmp/images/image.jpeg");
+                String localPath="/tmp/images/image.jpeg";
+                String obsPath="bind/demo.jpeg";
+                huaweiAPI.uploadImage(localPath,obsPath);
             }
             else {
                 FileUtil.saveAsFileWriter("/tmp/images/image.txt",receiveHex,true);
