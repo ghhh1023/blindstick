@@ -33,6 +33,7 @@ public class GetDeviceHandler {
 
     // 静态变量
     private static HuaweiAPI huaweiAPI;
+    private static int imgIndex=0;
 //
 //    // 构造方法注入静态变量
 //    @Autowired
@@ -101,9 +102,9 @@ public class GetDeviceHandler {
                 String tempStr=receiveHex.substring(0,start+4);
                 imgStart=false;
                 FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,true);
-                FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"),"/tmp/images/image.jpeg");
-                String localPath="/tmp/images/image.jpeg";
-                String obsPath="bind/demo.jpeg";
+                FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"),"/tmp/images/image"+imgIndex+".jpeg");
+                String localPath="/tmp/images/image"+imgIndex+".jpeg";
+                String obsPath="bind/demo"+imgIndex+".jpeg";
                 huaweiAPI.uploadImage(localPath,obsPath);
             }
             else {
