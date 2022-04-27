@@ -106,6 +106,7 @@ public class GetDeviceHandler {
                 String localPath="/tmp/images/image"+imgIndex+".jpeg";
                 String obsPath="bind/demo"+imgIndex+".jpeg";
                 huaweiAPI.uploadImage(localPath,obsPath);
+                imgIndex++;
             }
             else {
                 FileUtil.saveAsFileWriter("/tmp/images/image.txt",receiveHex,true);
