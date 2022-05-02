@@ -6,10 +6,14 @@ import com.huaweicloud.sdk.core.exception.ConnectionException;
 import com.huaweicloud.sdk.core.exception.RequestTimeoutException;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.image.v2.ImageClient;
+import com.huaweicloud.sdk.image.v2.model.ImageTaggingItemBody;
 import com.huaweicloud.sdk.image.v2.model.ImageTaggingReq;
 import com.huaweicloud.sdk.image.v2.model.RunImageTaggingRequest;
 import com.huaweicloud.sdk.image.v2.model.RunImageTaggingResponse;
 import com.huaweicloud.sdk.image.v2.region.ImageRegion;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImageRecognition {
 
@@ -33,7 +37,12 @@ public class ImageRecognition {
         request.withBody(body);
         try {
             RunImageTaggingResponse response = client.runImageTagging(request);
-            System.out.println(response.toString());
+            List<String> tags = new ArrayList<>();
+            List<ImageTaggingItemBody> res = response.getResult().getTags();
+            for (int i=0; i<res.size(); i++){
+                tags.add(res.get(i).getTag());
+            }
+            System.out.println(tags.toString());
         } catch (ConnectionException e) {
             e.printStackTrace();
         } catch (RequestTimeoutException e) {

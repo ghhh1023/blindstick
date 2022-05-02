@@ -15,7 +15,7 @@ public class BlindstickApplication {
         System.out.println(app.getBean("huaweiAPI"));
         HuaweiAPI huaweiAPI = (HuaweiAPI) app.getBean("huaweiAPI");
         String localPath="C://Users//lenovo//Desktop//ai//test.jpg";
-        String obsPath="bind/demo.jpg";
+        String obsPath="bind/.jpg";
         huaweiAPI.uploadImage(localPath,obsPath);
         SpringUtil.setApplicationContext(app);
         new SocketServer().start(4001);

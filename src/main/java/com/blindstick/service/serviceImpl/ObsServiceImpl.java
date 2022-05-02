@@ -2,12 +2,10 @@ package com.blindstick.service.serviceImpl;
 
 import com.blindstick.service.ObsService;
 import com.blindstick.utils.HuaweiAPI;
-import com.obs.services.ObsClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-
+@Service
 public class ObsServiceImpl implements ObsService {
     @Autowired
     private HuaweiAPI huaweiAPI;
