@@ -1,26 +1,52 @@
 package com.blindstick.netty.handler.receive;
 
 
-
 import com.blindstick.netty.handler.channel.ConnectManager;
+import com.blindstick.utils.FileUtil;
 import com.blindstick.utils.HexUtil;
+import com.blindstick.utils.HuaweiAPI;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-
+@Component
 public class GetDeviceHandler {
     private static Logger logger = LoggerFactory.getLogger(GetDeviceHandler.class);
 
     public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public  static boolean imgStart=false;
+    private static final String startRegex="ffd8";
+    private static final String endRegex="ffd9";
+
+    // 静态变量
+    private static HuaweiAPI huaweiAPI;
+    private static int imgIndex=0;
+//
+//    // 构造方法注入静态变量
+//    @Autowired
+//    public void setHuaweiAPI(HuaweiAPI huaweiAPI){
+//        GetDeviceHandler.huaweiAPI = huaweiAPI;
+//    }
+    @Autowired
+    private HuaweiAPI huaweiAPI2;
+    @PostConstruct
+    public void init() {
+        GetDeviceHandler.huaweiAPI = this.huaweiAPI2;
+    }
+
 
     /**
      * 数据接收处理器
@@ -60,7 +86,32 @@ public class GetDeviceHandler {
         String time3 = df7.format(new Date());
 
         logger.info(time3 + "上传原始数据:" + receiveHex);
-
+        if(!imgStart){
+            Matcher matcher= Pattern.compile(startRegex).matcher(receiveHex);
+            if(matcher.find()){
+                Integer start = matcher.start();
+                String tempStr=receiveHex.substring(start,receiveHex.length());
+                imgStart=true;
+                FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,false);
+            }
+        }
+        else{
+            Matcher matcher= Pattern.compile(endRegex).matcher(receiveHex);
+            if(matcher.find()){
+                Integer start = matcher.start();
+                String tempStr=receiveHex.substring(0,start+4);
+                imgStart=false;
+                FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,true);
+                FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"),"/tmp/images/image"+imgIndex+".jpeg");
+                String localPath="/tmp/images/image"+imgIndex+".jpeg";
+                String obsPath="bind/demo"+imgIndex+".jpeg";
+                huaweiAPI.uploadImage(localPath,obsPath);
+                imgIndex++;
+            }
+            else {
+                FileUtil.saveAsFileWriter("/tmp/images/image.txt",receiveHex,true);
+            }
+        }
         String strReceiveASCII = HexUtil.convertHexToString(receiveHex);
         System.out.println(strReceiveASCII);
         //注册
@@ -82,7 +133,6 @@ public class GetDeviceHandler {
         if(receiveHex.contains("fefefe")){
             logger.info(time3 + "数据包:" + receiveHex);
         }
-
     }
 
 
