@@ -12,7 +12,10 @@ public class FileUtil {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        InputStreamReader isr = new InputStreamReader(is);
+        InputStreamReader isr = null;
+        if (is != null) {
+            isr = new InputStreamReader(is);
+        }
         BufferedReader br = new BufferedReader(isr);
         String str = null;
         StringBuilder sb = new StringBuilder();
@@ -65,8 +68,8 @@ public class FileUtil {
         }
         try
         {
-            FileOutputStream out = new FileOutputStream(new File(output));
-            byte[] bytes = src.getBytes();
+            FileOutputStream out = new FileOutputStream(output);
+            byte[] bytes = src.getBytes("utf-8");
             for (int i = 0; i < bytes.length; i += 2)
             {
                 out.write(charToInt(bytes[i]) * 16 + charToInt(bytes[i + 1]));

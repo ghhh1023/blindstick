@@ -33,7 +33,6 @@ public class GetDeviceHandler {
 
     // 静态变量
     private static HuaweiAPI huaweiAPI;
-    private static int imgIndex=0;
 //
 //    // 构造方法注入静态变量
 //    @Autowired
@@ -60,11 +59,7 @@ public class GetDeviceHandler {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             String receiveStr = new String(bytes, StandardCharsets.UTF_8);
-            if (receiveStr != null) {
-                getMessage(bytes, ctx);
-            } else {
-                ctx.close();
-            }
+            getMessage(bytes, ctx);
         } catch (Exception e) {
             e.printStackTrace();
             ctx.close();
@@ -90,7 +85,7 @@ public class GetDeviceHandler {
             Matcher matcher= Pattern.compile(startRegex).matcher(receiveHex);
             if(matcher.find()){
                 Integer start = matcher.start();
-                String tempStr=receiveHex.substring(start,receiveHex.length());
+                String tempStr=receiveHex.substring(start);
                 imgStart=true;
                 FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,false);
             }
@@ -98,22 +93,35 @@ public class GetDeviceHandler {
         else{
             Matcher matcher= Pattern.compile(endRegex).matcher(receiveHex);
             if(matcher.find()){
-                Integer start = matcher.start();
-                String tempStr=receiveHex.substring(0,start+4);
-                imgStart=false;
-                FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,true);
-                FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"),"/tmp/images/image"+imgIndex+".jpeg");
-                String localPath="/tmp/images/image"+imgIndex+".jpeg";
-                String obsPath="bind/demo"+imgIndex+".jpeg";
-                huaweiAPI.uploadImage(localPath,obsPath);
-                imgIndex++;
+                do {
+                    int start = matcher.start();
+                    if (start % 2 == 0) {
+                        String tempStr = receiveHex.substring(0, start + 4);
+                        imgStart = false;
+                        FileUtil.saveAsFileWriter("/tmp/images/image.txt", tempStr, true);
+                        FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"), "/tmp/images/image.jpeg");
+                        String localPath = "/tmp/images/image.jpeg";
+                        String obsPath = "bind/image.jpeg";
+                        String obsPath2 = "image.jpeg";
+                        huaweiAPI.uploadImage(localPath, obsPath);
+                        tempStr = huaweiAPI.getImageTag(obsPath2);
+                        System.out.println(tempStr);
+                        break;
+//                List<String> addrs = ConnectManager.getDeviceAll();
+//                for (String addr : addrs) {
+//                    String message = HexUtil.convertStringToUTF8(tempStr);
+//                    //下发指令
+//                    ConnectManager.sendMessage(addr, message);
+//                }
+                    }
+                }while (matcher.find());
             }
             else {
                 FileUtil.saveAsFileWriter("/tmp/images/image.txt",receiveHex,true);
             }
         }
         String strReceiveASCII = HexUtil.convertHexToString(receiveHex);
-        System.out.println(strReceiveASCII);
+//        System.out.println(strReceiveASCII);
         //注册
         if(strReceiveASCII.contains("zc_")){
             logger.info(time3 + "注册:" + strReceiveASCII);

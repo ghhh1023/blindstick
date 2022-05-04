@@ -21,9 +21,10 @@ public class ImageController {
     @GetMapping("/upload")
     public String getImageTag(@RequestParam(value="path",defaultValue="1a5ce2300dbd9c48b1bac6c9dca199a46a182525.jpg",required = false)
                                       String path){
-        String localPath="C://Users//lenovo//Desktop//ai//test.jpg";
-        String obsPath="bind/.jpg";
-        obsService.uploadImage(localPath,obsPath);
+//        String localPath="C://Users//lenovo//Desktop//ai//test.jpg";
+//        String obsPath="bind/.jpg";
+//        obsService.uploadImage(localPath,obsPath);
+        System.out.println(imageService.getImageTag(path));
         return imageService.getImageTag(path);
     }
 }
