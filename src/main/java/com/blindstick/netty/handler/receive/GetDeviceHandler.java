@@ -14,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +31,7 @@ public class GetDeviceHandler {
     public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public  static boolean imgStart=false;
     private static final String startRegex="ffd8";
-    private static final String endRegex="ffd9";
+    private static final String endRegex="ffd9$";
 
     // 静态变量
     private static HuaweiAPI huaweiAPI;
@@ -79,7 +81,6 @@ public class GetDeviceHandler {
 
         DateFormat df7 = DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.CHINA);
         String time3 = df7.format(new Date());
-
         logger.info(time3 + "上传原始数据:" + receiveHex);
         if(!imgStart){
             Matcher matcher= Pattern.compile(startRegex).matcher(receiveHex);
@@ -106,13 +107,23 @@ public class GetDeviceHandler {
                         huaweiAPI.uploadImage(localPath, obsPath);
                         tempStr = huaweiAPI.getImageTag(obsPath2);
                         System.out.println(tempStr);
+                        // 发送识别信息给硬件
+                        List<String> addrs = ConnectManager.getDeviceAll();
+                        for (String addr : addrs) {
+
+                            String message1="{\"cmd\":"+"\"soundPlay\""+",\"msg\""+":"+"\""+tempStr+"\""+"}";
+                            byte[] strBytes=null;
+                            try {
+                                strBytes=message1.getBytes("GBK");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                            //下发指令
+                            System.out.println(message1);
+                            ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(strBytes));
+//            ConnectManager.sendMessage(addr,msg);
+                        }
                         break;
-//                List<String> addrs = ConnectManager.getDeviceAll();
-//                for (String addr : addrs) {
-//                    String message = HexUtil.convertStringToUTF8(tempStr);
-//                    //下发指令
-//                    ConnectManager.sendMessage(addr, message);
-//                }
                     }
                 }while (matcher.find());
             }

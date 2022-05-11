@@ -6,6 +6,7 @@ import com.blindstick.utils.HexUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -16,12 +17,19 @@ public class TestController {
         List<String> addrs = ConnectManager.getDeviceAll();
 
         for (String addr : addrs) {
-            String message=HexUtil.convertStringToUTF8("{"+"\"msg\""+":"+"\"你好！\""+"}");
-            String msg=HexUtil.convertStringToHex("{"+"\"msg\""+":"+"\""+HexUtil.convertStringToUTF8("你好")+"\""+"}");
-            System.out.println(msg);
+            String msg= "你!好";
+
+            String message1="{\"cmd\":"+"\"soundPlay\""+",\"msg\""+":"+"\""+msg+"\""+"}";
+            byte[] bytes=null;
+            try {
+                bytes=message1.getBytes("GBK");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             //下发指令
-//            ConnectManager.sendMessage(addr,message);
-            ConnectManager.sendMessage(addr,msg);
+            System.out.println(message1);
+            ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(bytes));
+//            ConnectManager.sendMessage(addr,msg);
         }
         return "111";
     }
@@ -32,6 +40,6 @@ public class TestController {
 //        Date date = sdf.parse("2022-04-01");
 //        calendar.setTime(date);
 //        System.out.println(calendar.get(1));
-        FileUtil.saveToImgFile(FileUtil.readToString("/tmp/images/image.txt"),"/tmp/images/image.jpeg");
+        FileUtil.saveToImgFile(FileUtil.readToString("C:/Users/guhao/Desktop/image.txt"),"C:/Users/guhao/Desktop/image.jpeg");
     }
 }
