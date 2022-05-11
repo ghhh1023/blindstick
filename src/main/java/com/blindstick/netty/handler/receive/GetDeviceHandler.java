@@ -82,6 +82,7 @@ public class GetDeviceHandler {
         DateFormat df7 = DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.CHINA);
         String time3 = df7.format(new Date());
         logger.info(time3 + "上传原始数据:" + receiveHex);
+        //接收图片并识别返回
         if(!imgStart){
             Matcher matcher= Pattern.compile(startRegex).matcher(receiveHex);
             if(matcher.find()){
