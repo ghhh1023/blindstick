@@ -52,8 +52,8 @@ public class GetDeviceHandler {
     /**
      * 数据接收处理器
      *
-     * @param ctx
-     * @param msg
+     * @param ctx 通道内容
+     * @param msg 信息对象
      */
     public static void getDeviceInfo(ChannelHandlerContext ctx, Object msg) {
         try {
@@ -86,7 +86,7 @@ public class GetDeviceHandler {
         if(!imgStart){
             Matcher matcher= Pattern.compile(startRegex).matcher(receiveHex);
             if(matcher.find()){
-                Integer start = matcher.start();
+                int start = matcher.start();
                 String tempStr=receiveHex.substring(start);
                 imgStart=true;
                 FileUtil.saveAsFileWriter("/tmp/images/image.txt",tempStr,false);
