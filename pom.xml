@@ -140,7 +140,17 @@
             <artifactId>esdk-obs-java-bundle</artifactId>
             <version>[3.21.8,)</version>
         </dependency>
-
+        <!--  百度云 通用场景OCR -->
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>4.16.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baidubce</groupId>
+            <artifactId>api-explorer-sdk</artifactId>
+            <version>1.0.3.1</version>
+        </dependency>
 
     </dependencies>
 

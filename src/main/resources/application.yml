@@ -53,3 +53,9 @@ Huawei:
   EndPoint: obs.cn-south-1.myhuaweicloud.com
   BucketName: ai-traffic-demo
   PrePath: bind
+
+Baidu:
+  OCR:
+    APP_ID: 26247076
+    API_KEY: 70aze5kdt0FfsepK4qSXwCvF
+    SECRET_KEY: x9rrX6IPElIraaidFHVIv7kYHnxdQWPj
