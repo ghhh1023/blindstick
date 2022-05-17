@@ -32,9 +32,10 @@ public class BaiduAPI {
 
 
         // 参数为本地图片路径
-        String image = "C://Users//lenovo//Pictures//Feedback//test.jpg";
+        String image = "C:\\Users\\guhao\\Desktop\\1.png";
         JSONObject res = client.webImage(image, options);
-        System.out.println(res.get("words_result"));
+        System.out.println(res);
+//        System.out.println(res.get("words_result").toString().replaceAll("","");
     }
 
     /**

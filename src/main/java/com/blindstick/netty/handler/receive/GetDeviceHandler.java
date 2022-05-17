@@ -35,12 +35,6 @@ public class GetDeviceHandler {
 
     // 静态变量
     private static HuaweiAPI huaweiAPI;
-//
-//    // 构造方法注入静态变量
-//    @Autowired
-//    public void setHuaweiAPI(HuaweiAPI huaweiAPI){
-//        GetDeviceHandler.huaweiAPI = huaweiAPI;
-//    }
     @Autowired
     private HuaweiAPI huaweiAPI2;
     @PostConstruct
@@ -107,6 +101,7 @@ public class GetDeviceHandler {
                         String obsPath2 = "image.jpeg";
                         huaweiAPI.uploadImage(localPath, obsPath);
                         tempStr = huaweiAPI.getImageTag(obsPath2);
+                        tempStr=tempStr.replaceAll("[^\\u4e00-\\u9fa5]+","");
                         System.out.println(tempStr);
                         // 发送识别信息给硬件
                         List<String> addrs = ConnectManager.getDeviceAll();
@@ -122,7 +117,6 @@ public class GetDeviceHandler {
                             //下发指令
                             System.out.println(message1);
                             ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(strBytes));
-//            ConnectManager.sendMessage(addr,msg);
                         }
                         break;
                     }

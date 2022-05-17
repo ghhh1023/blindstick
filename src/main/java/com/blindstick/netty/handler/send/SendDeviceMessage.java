@@ -3,6 +3,7 @@ package com.blindstick.netty.handler.send;
 
 
 import com.blindstick.netty.handler.channel.ConnectManager;
+import com.blindstick.utils.HexUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,9 +26,9 @@ public class SendDeviceMessage {
         List<String> addrs = ConnectManager.getDeviceAll();
 
         for (String addr : addrs) {
-            String message = "68656c6c6f";
+            String result = "hello";
             //下发指令
-            ConnectManager.sendMessage(addr, message);
+            ConnectManager.sendMessage(addr, HexUtil.convertStringToHex(result));
         }
 
 
