@@ -12,17 +12,14 @@ import com.blindstick.utils.ValidatedUtil;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -64,18 +61,16 @@ public class UserController {
                     user.setSalt(null);
                     redisService.set("user:"+user.getId(),uuid.toString(),60*60*24*7);
                     Map map = new LinkedHashMap();
-                    map.put("code",0);
-                    map.put("msg","登录成功");
                     map.put("token",token);
                     map.put("id",user.getId());
-                    return RetJson.success(map);
+                    return RetJson.success(map,"登录成功");
                 }catch (Exception e){
                     return RetJson.fail(-1,"登录失败,请检查用户名或密码");
                 }
             }
             Map<String,Object> map=new LinkedHashMap<>();
             map.put("id",user.getId());
-            return RetJson.success(map);
+            return RetJson.success(map,"登录成功");
         }else {
             return RetJson.fail(-1,"登录失败,请检查用户名或密码");
         }

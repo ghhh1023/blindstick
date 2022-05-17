@@ -3,7 +3,6 @@ package com.blindstick.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class RetJson {
@@ -35,24 +34,15 @@ public class RetJson {
         this.data = data;
     }
 
-    public static RetJson success(Map map){
+    public static RetJson success(Map map,String msg){
         RetJson retJson=new RetJson();
         retJson.setCode(0);
+        retJson.setMsg(msg);
         retJson.setData(map);
         return retJson;
     }
 
-    public static RetJson success(String key,String value){
-        Map<String,Object> map=new HashMap<>();
-        map.put(key,value);
-        return success(map);
-    }
 
-    public static RetJson success(String key,Object value){
-        Map<String,Object> map=new HashMap<>();
-        map.put(key,value);
-        return success(map);
-    }
 
     public static RetJson success(int code,String msg){
         RetJson retJson=new RetJson();
