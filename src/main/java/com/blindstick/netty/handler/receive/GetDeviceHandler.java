@@ -2,6 +2,7 @@ package com.blindstick.netty.handler.receive;
 
 
 import com.blindstick.netty.handler.channel.ConnectManager;
+import com.blindstick.utils.BaiduAPI;
 import com.blindstick.utils.FileUtil;
 import com.blindstick.utils.HexUtil;
 import com.blindstick.utils.HuaweiAPI;
@@ -41,6 +42,16 @@ public class GetDeviceHandler {
     public void init() {
         GetDeviceHandler.huaweiAPI = this.huaweiAPI2;
     }
+
+    // 静态变量
+    private static BaiduAPI baiduAPI;
+    @Autowired
+    private BaiduAPI baiduAPI2;
+    @PostConstruct
+    public void init2() {
+        GetDeviceHandler.baiduAPI = this.baiduAPI2;
+    }
+
 
 
     /**
@@ -103,20 +114,26 @@ public class GetDeviceHandler {
                         tempStr = huaweiAPI.getImageTag(obsPath2);
                         tempStr=tempStr.replaceAll("[^\\u4e00-\\u9fa5]+","");
                         System.out.println(tempStr);
+                        String wordsStr= baiduAPI.getWordMessage(localPath);
                         // 发送识别信息给硬件
                         List<String> addrs = ConnectManager.getDeviceAll();
                         for (String addr : addrs) {
 
                             String message1="{\"cmd\":"+"\"soundPlay\""+",\"msg\""+":"+"\""+tempStr+"\""+"}";
-                            byte[] strBytes=null;
+                            String message2="{\"cmd\":"+"\"soundPlay\""+",\"msg\""+":"+wordsStr+"}";
+                            System.out.println(message1);
+                            System.out.println(message2);
+                            byte[] strBytes1=null;
+                            byte[] strBytes2=null;
                             try {
-                                strBytes=message1.getBytes("GBK");
+                                strBytes1=message1.getBytes("GBK");
+                                strBytes2=message2.getBytes("GBK");
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
                             //下发指令
-                            System.out.println(message1);
-                            ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(strBytes));
+                            ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(strBytes1));
+                            ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(strBytes2));
                         }
                         break;
                     }

@@ -34,8 +34,7 @@ public class BaiduAPI {
         // 参数为本地图片路径
         String image = "C:\\Users\\guhao\\Desktop\\1.png";
         JSONObject res = client.webImage(image, options);
-        System.out.println(res);
-//        System.out.println(res.get("words_result").toString().replaceAll("","");
+        System.out.println(res.get("words_result").toString().replaceAll("\\{|\\}|\"words\"|:",""));
     }
 
     /**
@@ -54,7 +53,6 @@ public class BaiduAPI {
 
         // 参数为本地图片路径
         JSONObject res = client.webImage(path, options);
-        return res.get("words_result").toString();
-
+        return res.get("words_result").toString().replaceAll("\\{|\\}|\"words\"|:","");
     }
 }
