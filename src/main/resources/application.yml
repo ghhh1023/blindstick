@@ -45,6 +45,8 @@ my:
       - /blindstick/register
       - /blindstick/test
       - /blindstick/upload
+      - /blindstick/sendMsg
+      - /blindstick/sendMsg1
 Huawei:
   ImageApi:
     ak: PMAKSMTFCD4RJBO4474K

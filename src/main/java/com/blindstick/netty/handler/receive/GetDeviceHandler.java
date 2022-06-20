@@ -133,6 +133,11 @@ public class GetDeviceHandler {
                             }
                             //下发指令
                             ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(strBytes1));
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             ConnectManager.sendMessage(addr,HexUtil.bytes2HexString(strBytes2));
                         }
                         break;
