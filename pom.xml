@@ -125,6 +125,12 @@
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-image</artifactId>
             <version>3.0.55</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>huaweicloud-sdk-core</artifactId>
+                    <groupId>com.huaweicloud.sdk</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--fastjson-->
@@ -160,6 +166,20 @@
             <groupId>com.baidubce</groupId>
             <artifactId>api-explorer-sdk</artifactId>
             <version>1.0.3.1</version>
+        </dependency>
+
+        <!--  mqtt  -->
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
+        <!--华为云iotda-->
+        <dependency>
+            <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-iotda</artifactId>
+            <version>3.0.93</version>
         </dependency>
 
     </dependencies>
