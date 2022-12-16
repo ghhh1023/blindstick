@@ -36,6 +36,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     UserService userService;
 
+    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        排除部分url
         String url=request.getRequestURI();
