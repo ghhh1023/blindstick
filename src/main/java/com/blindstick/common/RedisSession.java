@@ -8,7 +8,7 @@ import com.blindstick.utils.SpringUtil;
 import java.util.Map;
 
 /**
- * @author zeng
+ * @author gh
  * 通过token管理用户会话信息
  */
 public class RedisSession {

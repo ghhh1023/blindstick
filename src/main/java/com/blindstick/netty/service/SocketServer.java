@@ -32,10 +32,21 @@ public class SocketServer {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline()
                                 .addLast(new IdleStateHandler(60L, 0L, 0L, TimeUnit.MINUTES));
-                        /*socketChannel.pipeline()
+                        /* socketChannel.pipeline()
                                 .addLast(new LengthFieldBasedFrameDecoder(2048,1,2,3,0,true));*/
                         socketChannel.pipeline()
                                 .addLast(new SocketHandler());
+                        /* 解决tcp拆包、粘包问题方案一：固定长度
+                        socketChannel.pipeline()
+                                .addLast(new FixedLengthFrameDecoder(16)); */
+                        /* 解决tcp拆包、粘包问题方案二：分隔符
+                         socketChannel.pipeline()
+                                .addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.wrappedBuffer("ghh".getBytes()))); // 自定义分隔符
+                        socketChannel.pipeline()
+                                .addLast(new LineBasedFrameDecoder(1024)); // 换行分隔符 */
+                        /* 解决tcp拆包、粘包问题方案三：固定长度
+                        socketChannel.pipeline()
+                                .addLast(new FixedLengthFrameDecoder(16)); */
                     }
                 });
         try {
