@@ -44,9 +44,9 @@ public class SocketServer {
                                 .addLast(new DelimiterBasedFrameDecoder(1024, Unpooled.wrappedBuffer("ghh".getBytes()))); // 自定义分隔符
                         socketChannel.pipeline()
                                 .addLast(new LineBasedFrameDecoder(1024)); // 换行分隔符 */
-                        /* 解决tcp拆包、粘包问题方案三：固定长度
-                        socketChannel.pipeline()
-                                .addLast(new FixedLengthFrameDecoder(16)); */
+                        /* 解决tcp拆包、粘包问题方案三：自定义结构体
+                        自定义一个NettyMsgEncoder类继承MessageToByteEncoder<NettyMsg>重写编码方法
+                         一个NettyMsgDecoder类继承ByteToMessageDecoder重写解码方法*/
                     }
                 });
         try {
